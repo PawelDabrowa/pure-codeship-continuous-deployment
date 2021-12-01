@@ -7,13 +7,13 @@ set -e
 : ${WPE_INSTALL?"WPE_INSTALL Missing"}   # subdomain for wpengine install (Legacy single environment setup)
 : ${REPO_NAME?"REPO_NAME Missing"}       # repo name (Typically the folder name of the project)
 
-# Set repo based on current branch, by default master=production, develop=staging
+# Set repo based on current branch, by default main=production, develop=staging
 # @todo support custom branches
 
 # This is considered legacy wpengine setup and should be deprecated. We'll keep this workflow in place for backwards compatibility.
 target_wpe_install=${WPE_INSTALL}
 
-if [[ "$CI_BRANCH" == "master" && -n "$WPE_INSTALL" ]]
+if [[ "$CI_BRANCH" == "main" && -n "$WPE_INSTALL" ]]
 then
     repo=production
 else
@@ -24,7 +24,7 @@ else
 fi
 
 # In WP Engine's multi-environment setup, we'll target each instance based on branch with variables to designate them individually.
-if [[ "$CI_BRANCH" == "master" && -n "$WPE_INSTALL_PROD" ]]
+if [[ "$CI_BRANCH" == "main" && -n "$WPE_INSTALL_PROD" ]]
 then
     target_wpe_install=${WPE_INSTALL_PROD}
     repo=production
@@ -137,4 +137,4 @@ git config core.ignorecase false
 git add --all
 git commit -am "Deployment to ${target_wpe_install} $repo by $CI_COMMITTER_NAME from $CI_NAME"
 
-git push ${force} ${repo} master
+git push ${force} ${repo} main
